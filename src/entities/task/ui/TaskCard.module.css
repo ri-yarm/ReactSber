@@ -1,0 +1,7 @@
+.card {
+    background: red;
+}
+
+.card__completed {
+    background: green;
+}
