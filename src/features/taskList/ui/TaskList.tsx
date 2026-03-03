@@ -2,6 +2,7 @@ import { type Task, TaskCard } from 'entities/task'
 import styles from './TaskList.module.css'
 import { FilterButton } from 'shared/ui'
 import type { Filter } from 'features/taskList/model/types.ts'
+import { memo, useCallback } from 'react'
 
 type Props = {
   tasks: Task[]
@@ -9,15 +10,22 @@ type Props = {
   setFilter: (f: Filter) => void
 }
 
-export const TaskList = ({ tasks, action, setFilter }: Props) => {
-  const setFilterAll = () => setFilter('all')
-  const setFilterCompleted = () => setFilter('completed')
-  const setFilterIncomplete = () => setFilter('incomplete')
+export const TaskList = memo(({ tasks, action, setFilter }: Props) => {
+  // TODO не избыточно ли? FilterButton в memo
+  const setFilterAll = useCallback(() => setFilter('all'), [setFilter])
+  const setFilterCompleted = useCallback(
+    () => setFilter('completed'),
+    [setFilter]
+  )
+  const setFilterIncomplete = useCallback(
+    () => setFilter('incomplete'),
+    [setFilter]
+  )
 
   return (
     <div>
       <FilterButton onClick={setFilterAll}>ВСЕ</FilterButton>
-      <FilterButton onClick={setFilterCompleted}>Выполненые</FilterButton>
+      <FilterButton onClick={setFilterCompleted}>Выполненные</FilterButton>
       <FilterButton onClick={setFilterIncomplete}>В работе</FilterButton>
 
       <div className={styles.list}>
@@ -27,4 +35,4 @@ export const TaskList = ({ tasks, action, setFilter }: Props) => {
       </div>
     </div>
   )
-}
+})
