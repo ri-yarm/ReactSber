@@ -1,6 +1,6 @@
-import { memo } from 'react'
 import type { Task } from 'entities/task'
 import styles from './TaskCard.module.css'
+import { memo } from 'react'
 
 type Props = {
   task: Task
