@@ -11,7 +11,6 @@ type Props = {
 }
 
 export const TaskList = memo(({ tasks, action, setFilter }: Props) => {
-  // TODO не избыточно ли? FilterButton в memo
   const setFilterAll = useCallback(() => setFilter('all'), [setFilter])
   const setFilterCompleted = useCallback(
     () => setFilter('completed'),

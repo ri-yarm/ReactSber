@@ -1,18 +1,20 @@
-import { useCallback, useMemo, useState } from 'react'
+import { useCallback, useEffect, useMemo, useState } from 'react'
 import type { Task } from 'entities/task/model/types.ts'
 import type { Filter, useTaskI } from 'features/taskList/model/types.ts'
-
-const initialTasks: Task[] = [
-  { id: '1', title: 'Task 1', completed: false },
-  { id: '2', title: 'Task 2', completed: true },
-  { id: '3', title: 'Task 3', completed: false },
-  { id: '4', title: 'Task 3', completed: false },
-  { id: '5', title: 'Task 3', completed: false },
-]
+import { useGetTasksQuery } from 'entities/task'
 
 export function useTasks(): useTaskI {
-  const [tasks, setTasks] = useState<Task[]>(initialTasks)
+  const { data: remoteTasks = [] } = useGetTasksQuery()
+  // нужен второй стейт для локального удаления
+  const [tasks, setTasks] = useState<Task[]>(remoteTasks)
   const [filter, setFilter] = useState<Filter>('all')
+
+  // нужен для копирования в локальный стейт для удаления
+  useEffect(() => {
+    if (remoteTasks.length > 0 && tasks.length === 0) {
+      setTasks(remoteTasks)
+    }
+  }, [remoteTasks])
 
   const removeTask = useCallback((id: string) => {
     setTasks((prev) => prev.filter((task) => task.id !== id))
